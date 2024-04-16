@@ -8,6 +8,12 @@ class Archivador:
         self.__mat = dict()
         self.__csv = dict()
 
+    def ver_mat(self):
+        return self.__mat
+    
+    def ver_csv(self):
+        return self.__csv
+
     def ingresar_mat(self, archivo, clave):
         data = sio.loadmat(archivo)
         self.__mat[clave] = data["data"]
@@ -31,7 +37,7 @@ class Graficador:
 
     def graf_scatter(self, data, canal, posicion): #canal, posicion son int, tiempo es array
         axis = self.__axes.flat[posicion]
-        tiempo = np.arange(348001)
+        tiempo = np.arange(348000)
         data = data.reshape(data.shape[0],-1)
         axis.scatter(tiempo, data[canal,:])
         
@@ -44,13 +50,26 @@ class Graficador:
 
     def graf_ruido(self, data, canal, posicion):
         axis = self.__axes.flat[posicion]
-        #tiempo = np.arange(348001)
-        tiempo_segundos = np.arange(0, len(data[0]) / 500, 1 / 500) #frecuencia de muestreo es 500, osea 1000/2, en prereshape
+        tiempo = np.arange(348000)
+        #tiempo_segundos = np.arange(0, len(data[0]) / 500, 1 / 500) #frecuencia de muestreo es 500, osea 1000/2, en prereshape
         data = data.reshape(data.shape[0],-1)
         ruido = np.random.randint(31, size=348000)
         data_ruido = data+ruido
         #axis.plot(tiempo, data_ruido[canal,:])
-        axis.plot(tiempo_segundos*1000, data_ruido[canal,:])
+        axis.plot(tiempo, data_ruido[canal,:])
+
+archiver = Archivador()
+archiver.ingresar_gral("P005_EP_reposo.mat",1111)
+print(archiver.ver_mat())
+datos = archiver.ver_mat()[1111]
+print(np.shape(datos))
+grafiquer = Graficador(form=[2,3])
+grafiquer.graf_ruido(datos, 0, posicion=4)
+grafiquer.graf_scatter(datos, 0, posicion=2)
+grafiquer.graf_sum(datos, segmento=[400,600], posicion=3)
+
+plt.subplots_adjust(wspace=0.4, hspace=0.3)
+plt.show()
 
 
 
