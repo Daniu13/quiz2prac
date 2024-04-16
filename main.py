@@ -10,7 +10,7 @@ class Archivador:
 
     def ingresar_mat(self, archivo, clave):
         data = sio.loadmat(archivo)
-        self.__mat[clave] = data
+        self.__mat[clave] = data["data"]
 
     def ingresar_csv(self, archivo, clave):
         data = pd.read_csv(archivo)
@@ -23,16 +23,50 @@ class Archivador:
             self.ingresar_csv(archivo, clave)
 
 
-def cargar(archivo):
-    if archivo.endswith(".mat"):
-        data = sio.loadmat(archivo)
-    elif archivo.endswith(".csv"):
-        data = pd.read_csv(archivo)
-    return data
+class Graficador:
+    def __init__(self, form=[2,3]) -> None:
+        self.__fig = plt.figure()
+        self.__form = form
+        self.__axes = self.__fig.subplots(self.__form[0], self.__form[1])
 
-datos = cargar("S0539.mat")
-print(type(datos))
-print(datos)
+    def graf_scatter(self, data, tiempo, canal, posicion): #canal, posicion son int, tiempo es array
+        axis = self.__axes.flat[posicion]
+        tiempo = np.arange(348001)
+        data = data.reshape(data.shape[0],-1)
+        axis.scatter(tiempo, data[canal,:])
+        
+    def graf_sum(self, data, tiempo, segmento, posicion): #Segmento es iterable, segmento[1] es inclusivo
+        axis = self.__axes.flat[posicion]
+        tiempo = np.arange(segmento[0], segmento[1]+1)
+        data = data.reshape(data.shape[0],-1)
+        suma = np.sum(data[:,segmento[0]:segmento[1]+1], axis=0)
+        axis.plot(tiempo, suma)
+
+    def graf_ruido(self, data, tiempo, canal, posicion):
+        axis = self.__axes.flat[posicion]
+        tiempo = np.arange(348001)
+        data = data.reshape(data.shape[0],-1)
+        ruido = np.random.randint(31, size=348000)
+        data_ruido = data+ruido
+        axis.plot(tiempo, data_ruido[canal,:])
+
+
+
+# def cargar(archivo):
+#     if archivo.endswith(".mat"):
+#         data = sio.loadmat(archivo)
+#     elif archivo.endswith(".csv"):
+#         data = pd.read_csv(archivo)
+#     return data
+
+# datos = cargar("P005_EP_reposo.mat")
+# #datos = cargar("S0539.mat")
+# print(type(datos))
+# #print(datos)
+# print(sio.whosmat("P005_EP_reposo.mat"))
+# print(datos["data"])
+# print(np.shape(datos["data"]))
+#Data es un array (8,2000,174)
 
 def main():
     while True:
