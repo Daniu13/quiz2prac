@@ -27,7 +27,26 @@ class Archivador:
             self.ingresar_mat(archivo, clave)
         elif archivo.endswith(".csv"):
             self.ingresar_csv(archivo, clave)
+    
+    def mostrar_columnas(self, clave):
+        if clave in self.__csv:
+            return list(self.__csv[clave].columns)
+        else:
+            return "La clave no corresponde a un archivo CSV."
 
+    def scatter_columna(self, clave, nombre_columna):
+        if clave in self.__csv:
+            data = self.__csv[clave]
+            if nombre_columna in data.columns and pd.api.types.is_numeric_dtype(data[nombre_columna]):
+                plt.scatter(data.index, data[nombre_columna])
+                plt.xlabel('Índice')
+                plt.ylabel(nombre_columna)
+                plt.title(f'Scatter Plot de la columna {nombre_columna}')
+                plt.show()
+            else:
+                print(f"La columna '{nombre_columna}' no es numérica o no existe en el archivo CSV.")
+        else:
+            print("La clave no corresponde a un archivo CSV.")
 
 class Graficador:
     def __init__(self, form=[2,3]) -> None:
