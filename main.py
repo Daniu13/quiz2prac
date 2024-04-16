@@ -44,11 +44,14 @@ class Graficador:
 
     def graf_ruido(self, data, tiempo, canal, posicion):
         axis = self.__axes.flat[posicion]
-        tiempo = np.arange(348001)
+        #tiempo = np.arange(348001)
+        tiempo_segundos = np.arange(0, len(data[0]) / 500, 1 / 500) #frecuencia de muestreo es 500, osea 1000/2, en prereshape
         data = data.reshape(data.shape[0],-1)
         ruido = np.random.randint(31, size=348000)
         data_ruido = data+ruido
-        axis.plot(tiempo, data_ruido[canal,:])
+        #axis.plot(tiempo, data_ruido[canal,:])
+        axis.plot(tiempo_segundos*1000, data_ruido[canal,:])
+
 
 
 
