@@ -29,20 +29,20 @@ class Graficador:
         self.__form = form
         self.__axes = self.__fig.subplots(self.__form[0], self.__form[1])
 
-    def graf_scatter(self, data, tiempo, canal, posicion): #canal, posicion son int, tiempo es array
+    def graf_scatter(self, data, canal, posicion): #canal, posicion son int, tiempo es array
         axis = self.__axes.flat[posicion]
         tiempo = np.arange(348001)
         data = data.reshape(data.shape[0],-1)
         axis.scatter(tiempo, data[canal,:])
         
-    def graf_sum(self, data, tiempo, segmento, posicion): #Segmento es iterable, segmento[1] es inclusivo
+    def graf_sum(self, data, segmento, posicion): #Segmento es iterable, segmento[1] es inclusivo
         axis = self.__axes.flat[posicion]
         tiempo = np.arange(segmento[0], segmento[1]+1)
         data = data.reshape(data.shape[0],-1)
         suma = np.sum(data[:,segmento[0]:segmento[1]+1], axis=0)
         axis.plot(tiempo, suma)
 
-    def graf_ruido(self, data, tiempo, canal, posicion):
+    def graf_ruido(self, data, canal, posicion):
         axis = self.__axes.flat[posicion]
         #tiempo = np.arange(348001)
         tiempo_segundos = np.arange(0, len(data[0]) / 500, 1 / 500) #frecuencia de muestreo es 500, osea 1000/2, en prereshape
