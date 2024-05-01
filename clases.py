@@ -117,8 +117,8 @@ class Graficador:
 #archiver = Archivador()
 #archiver.ingresar_gral("P005_EP_reposo.mat", 'data')
 
-print(sio.whosmat("P005_EP_reposo.mat"))
-print(sio.whosmat("S0539.mat"))
+#print(sio.whosmat("P005_EP_reposo.mat"))
+#print(sio.whosmat("S0539.mat"))
 #print(type(archiver.ver_mat(clave='data')))
 
 #datos = archiver.ver_mat(clave='data')
